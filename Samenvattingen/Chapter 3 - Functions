@@ -1,0 +1,240 @@
+# Chapter 3 - Functions
+
+_Met functies kun je het programma structureren en zorgen voor minder herhaling van code_
+
+## - Defining a function
+
+_ const square = function(x) {
+  return x * x;
+};
+
+console.log(square(12));
+// → 144_
+
+** square = de varriabel die ontvangen wordt door de functie
+x = het getal waarmee vermenigvuldigd wordt
+square(10) = 10 x 10 = 100 **
+
+Door return kun je de waarde van een functie weer terug in een varriabel stoppen
+
+
+## - Bindings and scopes
+
+_Elke binding heeft een scope_ 
+* een scope =
+een binding = *
+wanneer bindings in een functie gebruikt worden zijn deze alleen beschikbaar voor die functie, ze niet in andere functies gebruikt worden
+
+Let en Const worden alleen binnen een blok gebruikt bijv in een for loop
+na deze lus zijn ze niet meer beschikbaar
+Variabelen met var zijn globaal en zijn in elke functie te gebruiken
+Let en const zijn alleen te gebruiken in een blok met code (zie formule)
+
+Var is te gebruiken in meerdere functies
+
+_ let x = 10;
+if (true) {
+  let y = 20;
+  var z = 30;
+  console.log(x + y + z);
+  // → 60
+}
+// y is not visible here
+console.log(x + z);
+// → 40 _
+
+
+## - Nested scope
+JavaScript onderscheidt niet alleen globale en lokale bindingen. 
+Blokken en functies kunnen in andere blokken en functies bewaard worden en produceren meerdere graden van lokaliteit.
+
+_
+const hummus = function(factor) {
+  const ingredient = function(amount, unit, name) {
+    let ingredientAmount = amount * factor;
+    if (ingredientAmount > 1) {
+      unit += "s";
+    }
+    console.log(`${ingredientAmount} ${unit} ${name}`);
+  };
+  ingredient(1, "can", "chickpeas");
+  ingredient(0.25, "cup", "tahini");
+  ingredient(0.25, "cup", "lemon juice");
+  ingredient(1, "clove", "garlic");
+  ingredient(2, "tablespoon", "olive oil");
+  ingredient(0.5, "teaspoon", "cumin");
+};
+_
+
+* let ingredientAmount is niet zichtbaar buiten deze functie *
+
+Lexical scoping = 
+De reeks bindingen zichtbaar binnen een blok wordt bepaald door de plaats van dat blok in de programmatekst.
+Elk lokaal bereik kan ook alle lokale bereiken zien die het bevatten en alle bereiken kunnen de globale scope zien.
+Deze benadering van bindende zichtbaarheid wordt lexical scoping genoemd.
+
+
+
+
+
+## - Functions as values
+Je kunt variabalen ook functies geven
+
+var launchMissiles = function() {
+  missileSystem.launch("now");
+};
+if (safeMode) {
+  launchMissiles = function() {/* do nothing */};
+}
+
+Het is handig om functies een passende naam te geven wat het doen of inhoudt
+function delen() zodat je weet wat het doet/gaat doen
+
+## - Declaration notation
+Het maakt voor functies niet veel uit of je de functies bovenaan het document plaatst of onderaan.
+De functies worden automatisch naar boven geplaatst
+
+## - Arrow functions
+> = groter dan
+< = kleiner dan
+
+const square1 = (x) => { return x * x; };
+
+Een kleinere manier om een functie te schrijven ipv:
+
+const square1 = function(x){ return x * x;}
+
+## - The call stack
+Het script wordt van boven naar beneden gelezen, wanneer er functies staan maar niet aangeroepen worden, worden deze niet uitgevoerd
+
+## - Optional Arguments
+Javascript is broad-minded, wanneer je teveel argumenten opgeeft worden deze genegeerd, 
+wanneer er te weinig opgegeven worden komt er value undefined
+
+Nadeel hiervan is dat je per ongeluk veel meer op kan geven waardoor het systeem trager wordt
+Voordeel is dat je een functie hierop kan laten inspelen.
+
+
+function minus(a, b) {
+  if (b === undefined) return -a;
+  else return a - b;
+}
+
+console.log(minus(10));
+// → -10
+console.log(minus(10, 5));
+// → 5
+
+als er dus geen b opgegeven wordt laat het -10 zien
+
+## - Closure
+het kunnen verwijzen naar een specifiek variabel van een lokale binding in een insluitend bereik - wordt closure genoemd
+een functie die verwijst naar bindingen in een local scope word closure genoemd.
+Dus het gebruiken van een variabel buiten de functie om
+
+function multiplier(factor) {
+  return number => number * factor;
+}
+
+let twice = multiplier(2);
+console.log(twice(5));
+// → 10
+
+5 wordt meegegeven aan twice dus wordt het (5, 2)
+
+## - Recursion
+Wanneer functies andere of dezelfde functies oproepen word dat recursion genoemd
+
+
+function power(base, exponent) {
+  if (exponent == 0) {
+    return 1;
+  } else {
+    return base * power(base, exponent - 1);
+  }
+}
+
+console.log(power(2, 3));
+// → 8
+
+Vaak is dit langzamer dan een nieuwe loop te maken
+Bij javascript kun je beter eerst de code volledig schrijven en daarna aanpassen / korter maken
+
+Recursion is niet altijd een goede oplossing om te gebruiken
+
+Het getal 13 kan bijvoorbeeld worden bereikt door eerst 1 te vermenigvuldigen met 3 en vervolgens 5 tweemaal toe te voegen, terwijl het getal 15 helemaal niet kan worden bereikt.
+
+function findSolution(target) {
+  function find(current, history) {
+    if (current == target) {
+      return history;
+    } else if (current > target) {
+      return null;
+    } else {
+      return find(current + 5, `(${history} + 5)`) ||
+             find(current * 3, `(${history} * 3)`);
+    }
+  }
+  return find(1, "1");
+}
+
+console.log(findSolution(24));
+// → (((1 * 3) + 5) * 3)
+
+dit is wat de code doet:
+zoek (1, "1")
+  zoek (6, "(1 + 5)")
+    find (11, "((1 + 5) + 5)")
+      find (16, "(((1 + 5) + 5) + 5)")
+        te groot
+      find (33, "(((1 + 5) + 5) * 3)")
+        te groot
+    find (18, "((1 + 5) * 3)")
+      te groot
+  find (3, "(1 * 3)")
+    find (8, "((1 * 3) + 5)")
+      find (13, "(((1 * 3) + 5) + 5)")
+
+
+## - Growing functions
+2 manieren om functies te intergreren
+1. Herhalende functionaliteiten met bijpassende naam
+2. Functies met een eigen functie, je geeft eerst een naam aan de functie en daarna schrijf je het pas
+
+Het is belangrijk om een goede naam aan de functie te geven
+
+function zeroPad(number, width) {
+  let string = String(number);
+  while (string.length < width) {
+    string = "0" + string;
+  }
+  return string;
+}
+
+function printFarmInventory(cows, chickens, pigs) {
+  console.log(`${zeroPad(cows, 3)} Cows`);
+  console.log(`${zeroPad(chickens, 3)} Chickens`);
+  console.log(`${zeroPad(pigs, 3)} Pigs`);
+}
+
+printFarmInventory(7, 16, 3);
+
+
+
+
+##Extra info
+square(12)
+de 12 is hier een argument
+square(x)
+de x is hier een parameter
+
+Scope = variabel
+Local scope is alleen locaal beschikbaar (in een functie)
+Global scope is overal beschikbaar (in meerdere functies)
+
+Higher order zijn voorgemaakt functies in javascript.
+Zoals .map .filter en .reduce
+
+object = var persoon = firstname: "John",
+						age: 50
+

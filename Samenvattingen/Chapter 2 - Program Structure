@@ -1,0 +1,43 @@
+# Chapter 2 - Program Structure
+
+## - Expressions and statements
+expression = een stuk code dat een waarde opleverd
+een getal of een string is een expression
+
+## - Bindings
+Binding = toekennen
+var tien = 10;
+
+Keywords mogen niet gebruikt worden voor een variabel
+var var = "mag niet" = mag dus niet omdat var een keyword is
+
+## - Functions
+Een prompt dialog word niet vaak meer gebruikt (pop-up)
+Alleen soms in games komt het nog wel eens voor
+
+While / do lus
+For lus
+If statement
+Switch case
+
+Schrijf een functie met een hoofdletters
+fuzzyLittleTurtle 
+
+Plaats comments bij je code!
+
+
+##Extra info
+square(12)
+de 12 is hier een argument
+square(x)
+de x is hier een parameter
+
+Scope = variabel
+Local scope is alleen locaal beschikbaar (in een functie)
+Global scope is overal beschikbaar (in meerdere functies)
+
+Higher order zijn voorgemaakt functies in javascript.
+Zoals .map .filter en .reduce
+
+object = var persoon = firstname: "John",
+						age: 50
